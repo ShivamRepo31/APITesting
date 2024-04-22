@@ -34,48 +34,18 @@ Is used to test API "Return the USD rates against multiple currency"
 
 ## Installation
 
-Install my-project with npm
-
-```bash
-  npm install APITesting
-  cd APITesting
-```
+Install my-project with Eclipse/IntelliJ
+Clone Project
+Check for all dependency/Plugin
     
 ## Running Tests
 
-To run tests, run the following command
-
-```bash
-  npm run test
-```
-
-
-## Run Locally
-
-Clone the project
-
-```bash
-  git clone https://link-to-APITesting
-```
-
-Go to the project directory
-
-```bash
-  cd my-APITesting
-```
-
-Install dependencies
-
-```bash
-  npm install
-```
-
-Start the server
-
-```bash
-  npm run start
-```
-
+To run tests, follow the below steps
+Navigate to Project
+Navigate to src/test/java/Runner
+Under Runner folder look for TesRunner.java
+Right Click on .java file Run Using testNG
+html Reports are visible under target folder within the project
 
 ## Acknowledgements
 
