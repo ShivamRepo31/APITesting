@@ -41,11 +41,11 @@ Check for all dependency/Plugin
 ## Running Tests
 
 To run tests, follow the below steps
-Navigate to Project
-Navigate to src/test/java/Runner
-Under Runner folder look for TesRunner.java
-Right Click on .java file Run Using testNG
-html Reports are visible under target folder within the project
+-Navigate to Project
+-Navigate to src/test/java/Runner
+-Under Runner folder look for TestRunner.java
+-Right Click on .java file Run Using testNG
+-html Reports are visible under target folder within the project
 
 ## Acknowledgements
 
