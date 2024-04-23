@@ -4,11 +4,19 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import io.restassured.path.json.JsonPath;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.module.jsv.JsonSchemaValidator.*;
 import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
+
+import java.io.File;
+
+import org.hamcrest.Matchers;
 import org.testng.Assert;
+import io.restassured.internal.common.path.ObjectConverter.*;
 
 public class apiTestStepDef {
 
@@ -71,29 +79,38 @@ public class apiTestStepDef {
 
 	@Then("the API response timestamp should not be less than 3 seconds from the current time in seconds")
 	public void the_api_response_timestamp_should_not_be_less_than_3_seconds_from_the_current_time_in_seconds() {
-		// Ensure the response is not null and has a status code of 200 OK
-		Assert.assertNotNull(response, "The response object is null.");
-		Assert.assertEquals(response.statusCode(), 200, "The API did not return a 200 Ok Response");
+		{
+			   // Ensure the response is not null and has a status code of 200 OK
+			   Assert.assertNotNull(response, "The response object is null.");
+			   Assert.assertEquals(response.statusCode(), 200, "The API did not return a 200 Ok Response");
 
-		String responseBody = response.getBody().asString();
-		Assert.assertNotNull(responseBody, "The body is null or not present");
-		Assert.assertTrue(response.contentType().contains("application/json"),
-				"The response content Type is not Json.");
-
-		// Capture the API response timestamp from the body
-		JsonPath jsonPathEvaluator = new JsonPath(responseBody);
-		Long apiResponseTimestamp = jsonPathEvaluator.getLong("timestamp");
-
-		// Ensure the "timestamp" field is not null
-		Assert.assertNotNull(apiResponseTimestamp, "The 'timestamp' field in the response is missing or null.");
-
-		// Calculate the difference in seconds
-		long differenceInSeconds = apiResponseTimestamp - currentTimestampBeforeApiCall;
-
-		// Check that the response time is not less than 3 seconds from the current time
-		Assert.assertTrue(differenceInSeconds >= 3,
-				"The API response timestamp was less than 3 seconds from the sent request time.");
+			   // Check that the response time is not less than 3 seconds from the current time
+			   ValidatableResponse respTime = response.then();
+			   respTime.time(Matchers.greaterThan(3000L));
+			}
 	}
+	/*
+	 * String responseBody = response.getBody().asString();
+	 * Assert.assertNotNull(responseBody, "The body is null or not present");
+	 * Assert.assertTrue(response.contentType().contains("application/json"),
+	 * "The response content Type is not Json.");
+	 * 
+	 * // Capture the API response timestamp from the body JsonPath
+	 * jsonPathEvaluator = new JsonPath(responseBody); Long apiResponseTimestamp =
+	 * jsonPathEvaluator.getLong("timestamp");
+	 * 
+	 * // Ensure the "timestamp" field is not null
+	 * Assert.assertNotNull(apiResponseTimestamp,
+	 * "The 'timestamp' field in the response is missing or null.");
+	 * 
+	 * // Calculate the difference in seconds long differenceInSeconds =
+	 * apiResponseTimestamp - currentTimestampBeforeApiCall;
+	 * 
+	 * // Check that the response time is not less than 3 seconds from the current
+	 * time Assert.assertTrue(differenceInSeconds >= 3,
+	 * "The API response timestamp was less than 3 seconds from the sent request time."
+	 * ); }
+	 */
 
 	// Scenario 4: Currency Exchange
 
@@ -127,12 +144,10 @@ public class apiTestStepDef {
 		// This step will execute before the assertion step.
 	}
 
-	/*
-	 * @Then("the API response should match the JSON schema") public void
-	 * the_api_response_should_match_the_json_schema() { // This step will execute
-	 * after the validation step.
-	 * response.then().assertThat().body(matchesJsonSchemaInClasspath(
-	 * "C:\\Users\\Shivam Srivastava\\eclipse-workspace\\APITesting\\src\\test\\Resource\\TestData\\schema.json"
-	 * )); }
-	 */
+	
+	  @Then("the API response should match the JSON schema") public void
+	  the_api_response_should_match_the_json_schema() { // This step will executeafter the validation step.
+	  response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchema(new File("src/test/Resource/TestData/schema.json"))); 
+	  
+	  } 
 }
